@@ -7,6 +7,8 @@ import ProfileScreen from '../screens/ProfileScreen';
 // utils
 import { NavigationContainer } from '@react-navigation/native';
 import { ROUTES } from '../utils';
+import { useEffect } from 'react';
+import { StatusBar, useColorScheme } from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +22,16 @@ const MainNavigation = () => {
 };
 
 export default () => {
+  const isDarkmode = useColorScheme() === 'dark';
+    useEffect(()=>{
+      if (Platform.OS === 'android'){
+        StatusBar.setBarStyle('dark-content',true);
+      }
+    }, [isDarkmode]);
+
+
+
+
   return (
     <NavigationContainer>
       <MainNavigation />

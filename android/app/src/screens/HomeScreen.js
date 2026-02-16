@@ -11,7 +11,7 @@ const HomeScreen = () => {
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 3,
-        borderColor: 'red',
+        borderColor: 'blue',
       }}
     >
       <Image
@@ -30,9 +30,9 @@ const HomeScreen = () => {
       >
         <View
           style={{
-            backgroundColor: 'green',
+            backgroundColor: 'blue',
             padding: 10,
-            borderRadius: 20,
+            borderRadius: 10,
           }}
         >
           <Text style={{ fontSize: 40, color: 'white' }}>GO TO PROFILE</Text>
