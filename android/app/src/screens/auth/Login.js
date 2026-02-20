@@ -1,23 +1,36 @@
-import { View, Text, TextInput, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native'
+import { ROUTES } from '../../utils';
 // import { TextInput } from 'react-native-gesture-handler';             for some reason this doesnt work but its better to use this
-import { ROUTES } from '../utils';
+
 
 const Login = () => {
+    const [emailaddress, setemailaddress] = useState('');
+    const [password, setpassword] = useState('');
+
+    const navigation = useNavigation();
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text style={{color: 'blue', fontSize: 30}}>Welcome!</Text>
-      <TextInput placeholder='Email Address'style={{
+      <TextInput placeholder=' Email Address' value={val => setemailaddress(val)} style={{
+        backgroundColor: '#cccccc',
         width: '80%',
-        borderWidth: 1,
+        borderRadius: 10
       }}
       />
-      <TextInput placeholder='Password'  secureTextEntry={true} style={{
+      <TextInput placeholder=' Password' secureTextEntry={true} style={{
+        marginTop: 5,
+        backgroundColor: '#cccccc',
         width: '80%',
-        borderWidth: 1,
+        borderRadius: 10
       }}/>
-      <TouchableOpacity
+      <TouchableOpacity      
         onPress={() => {
-          navigation.navigate(ROUTES.PROFILE);
+          if (emailaddress === '' || password === '') {
+            Alert.alert('Invalid Credentials', 'Check username and password.');
+            return;
+          };
         }}
       >
         <View
@@ -28,11 +41,19 @@ const Login = () => {
             borderRadius: 10,
           }}
         >
-          <Text style={{ fontSize: 30, color: 'white' }}>Login</Text>
+          <Text style={{ fontSize: 20, color: 'white' }}>Login</Text>
         </View>
       </TouchableOpacity>
 
+      <Text>Create an Account?</Text>
+
+      <TouchableOpacity onPress={() =>{navigation.navigate(ROUTES.REGISTER)}}>
+        <Text style={{color: 'blue'}}>Register</Text>
+      </TouchableOpacity>
+      
+
     </View>
+    
   )
 }
 
