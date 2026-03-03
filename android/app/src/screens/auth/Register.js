@@ -3,6 +3,8 @@ import { useNavigation } from '@react-navigation/native';
 import { ROUTES } from '../../utils';
 import React from 'react'
 
+import CustomTextInput from '../../components/CustomTextInput';
+
 const Register = () => {
     const navigation = useNavigation();
 
@@ -10,7 +12,7 @@ const Register = () => {
 <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
     
     <Text style={{color: 'blue', fontSize: 30}}>Welcome!</Text>
-        <TextInput placeholder=' Username'style={{
+        {/* <TextInput placeholder=' Username'style={{
         marginTop: 5,
         backgroundColor: '#cccccc',
         width: '80%',
@@ -36,7 +38,23 @@ const Register = () => {
         width: '80%',
         borderRadius: 10
         }}
-        />        
+        />         */}
+
+      <CustomTextInput
+        placeholder = {'Enter StudentID'}
+      />
+      
+      <CustomTextInput
+        placeholder = {'Enter Password'}
+        secureTextEntry={true}
+      />
+
+      <CustomTextInput
+        placeholder = {'Enter Firstname'}
+      />
+            <CustomTextInput
+        placeholder = {'Enter Lastname'}
+      />
 
       <TouchableOpacity
         onPress={() => {

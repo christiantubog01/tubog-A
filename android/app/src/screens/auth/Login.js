@@ -3,34 +3,63 @@ import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native'
 import { ROUTES } from '../../utils';
 // import { TextInput } from 'react-native-gesture-handler';             for some reason this doesnt work but its better to use this
-
+import { userLogin } from '../../utils';
+import CustomTextInput from '../../components/CustomTextInput';
 
 const Login = () => {
-    const [emailaddress, setemailaddress] = useState('');
+    const [studentId, setstudentId] = useState('');
     const [password, setpassword] = useState('');
 
     const navigation = useNavigation();
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text style={{color: 'blue', fontSize: 30}}>Welcome!</Text>
-      <TextInput placeholder=' Email Address' value={val => setemailaddress(val)} style={{
+      <Text>Student ID: {studentId}</Text>
+      <Text>Password: {password}</Text>
+      {/* <TextInput
+        placeholder=" Student ID"
+        value={studentId}
+        onChangeText={(val) => setstudentId(val)}
+        style={{
         backgroundColor: '#cccccc',
         width: '80%',
         borderRadius: 10
-      }}
-      />
-      <TextInput placeholder=' Password' secureTextEntry={true} style={{
+        }}
+      /> */}
+
+      {/* <TextInput placeholder=' Password' onChangeText={(val) => setpassword(val)} secureTextEntry={true} style={{
         marginTop: 5,
         backgroundColor: '#cccccc',
         width: '80%',
         borderRadius: 10
-      }}/>
+      }}/> */}
+
+
+
+
+
+      <CustomTextInput
+        placeholder = {'Enter StudentID'}
+        value={studentId}
+        onChangeText={setstudentId}
+      />
+      <CustomTextInput
+        placeholder = {'Enter Password'}
+        value={password}
+        onChangeText={setpassword}
+        secureTextEntry={true}
+      />
+
+
       <TouchableOpacity      
-        onPress={() => {
-          if (emailaddress === '' || password === '') {
-            Alert.alert('Invalid Credentials', 'Check username and password.');
+        onPress={async () => {
+          if (studentId === '' || password === '') {
+            Alert.alert('Invalid Credentials', 'Check studentId and password.');
             return;
-          };
+          }
+
+          await userLogin ({ studentId, password});
+          
         }}
       >
         <View
