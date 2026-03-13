@@ -3,7 +3,7 @@ import { ROUTES } from '../utils';
 
 //screens
 import HomeScreen from '../screens/HomeScreen'
-import ProfileScreen from '..screens/ProfileScreen'
+import ProfileScreen from '../screens/ProfileScreen'
 
 const Stack = createStackNavigator();
 

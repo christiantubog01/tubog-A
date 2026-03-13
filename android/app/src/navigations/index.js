@@ -2,21 +2,27 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { useEffect } from 'react';
 import { Platform, StatusBar, useColorScheme } from 'react-native';
-
-import AuthNav from './AuthNav'
+import { useSelector } from 'react-redux';
+import AuthNav from './AuthNav';
+import MainNav from './MainNav';
 
 export default () => {
-  const isDarkmode = useColorScheme() === 'dark';
+  const isDarkMode = useColorScheme() === 'dark';
+  const { data } = useSelector(state => state.auth);
 
-    useEffect( () => {
-      if (Platform.OS === 'android') {
-        StatusBar.setBarStyle('dark-content',true);
-      }
-    }, [isDarkmode]);
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      StatusBar.setBarStyle('dark-content', true);
+    }
+  }, [isDarkMode]);
+
+  console.log(data);
 
   return (
     <NavigationContainer>
-      <AuthNav />
+      {data && data.access_token ? <MainNav /> : <AuthNav />}
+
+      {/* {data && data.access_token ? <AuthNav /> : <MainNav />} this is the original from instructur*/}
     </NavigationContainer>
   );
 };

@@ -3,40 +3,24 @@ import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native'
 import { ROUTES } from '../../utils';
 // import { TextInput } from 'react-native-gesture-handler';             for some reason this doesnt work but its better to use this
-import { userLogin } from '../../utils';
 import CustomTextInput from '../../components/CustomTextInput';
+
+import { authLogin } from '../../app/reducers/auth';
+import { useDispatch } from 'react-redux';
+
 
 const Login = () => {
     const [studentId, setstudentId] = useState('');
     const [password, setpassword] = useState('');
 
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text style={{color: 'blue', fontSize: 30}}>Welcome!</Text>
       <Text>Student ID: {studentId}</Text>
       <Text>Password: {password}</Text>
-      {/* <TextInput
-        placeholder=" Student ID"
-        value={studentId}
-        onChangeText={(val) => setstudentId(val)}
-        style={{
-        backgroundColor: '#cccccc',
-        width: '80%',
-        borderRadius: 10
-        }}
-      /> */}
-
-      {/* <TextInput placeholder=' Password' onChangeText={(val) => setpassword(val)} secureTextEntry={true} style={{
-        marginTop: 5,
-        backgroundColor: '#cccccc',
-        width: '80%',
-        borderRadius: 10
-      }}/> */}
-
-
-
-
 
       <CustomTextInput
         placeholder = {'Enter StudentID'}
@@ -58,8 +42,13 @@ const Login = () => {
             return;
           }
 
-          await userLogin ({ studentId, password});
-          
+          // await userLogin ({ studentId, password});
+          dispatch(
+            authLogin({
+              student_id: studentId,
+              password: password,
+            }), 
+          );         
         }}
       >
         <View

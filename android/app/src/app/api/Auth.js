@@ -1,24 +1,34 @@
-export async function userLogin({studentId, password}) {
-    const BASE_URL = "http://192.168.2.7:8000/api"
-    let options = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-    };
+const BASE_URL = "http://192.168.1.28:8000/api";   
+// const BASE_URL = "http://10.23.9.159:8000/api";       HOTSPOT
 
-    const responseParams = await fetch(
-        BASE_URL + '/login?student_id=${studentID}$password=&{password}',
-        options,
-    );
+//  [http://10.0.2.2:8000/api/login] still doesnt work
 
-    const data = await responseParams.json();
+let options = {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',       
+    'Content-Type': 'application/json',
+  },
+};
 
-    if (responseParams.status === 200) {
-        console.log(data);
-        return data;
-    } else {
-        throw new Error(data.error.password || 'Login failed');
-    }
+export async function authLogin({ student_id, password }) {
+  console.log('API called with:', student_id);
+  console.log('API called with:', password);
+
+  const responseBody = await fetch(BASE_URL + '/login', {
+    ...options,
+    body: JSON.stringify({
+      username: student_id,
+      password: password,
+    }),
+  });
+
+  const data = await responseBody.json();
+  console.log(data);
+
+  if (responseBody.status === 200) {
+    return data;
+  } else {
+    throw new Error(data.errors.password || 'Login failed');
+  }
 }
