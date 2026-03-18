@@ -4,6 +4,7 @@ import {
   USER_LOGIN_COMPLETE,
   USER_LOGIN_ERROR,
   USER_LOGIN_REQUEST,
+  USER_LOGOUT,
 } from '../actions';
 
 const INITIALSTATE = {
@@ -41,6 +42,9 @@ export default function reducer(state = INITIALSTATE, action) {
       };
 
     case RESET_USER_LOGIN:
+      return INITIALSTATE;
+
+    case USER_LOGOUT: 
       return INITIALSTATE;
 
     default:

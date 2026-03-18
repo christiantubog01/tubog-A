@@ -20,9 +20,7 @@ export default () => {
 
   return (
     <NavigationContainer>
-      {data && data.access_token ? <MainNav /> : <AuthNav />}
-
-      {/* {data && data.access_token ? <AuthNav /> : <MainNav />} this is the original from instructur*/}
+      {data && data.token ? <MainNav /> : <AuthNav />}  
     </NavigationContainer>
   );
 };
