@@ -18,9 +18,9 @@ const Login = () => {
 
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={{color: 'blue', fontSize: 30}}>Welcome!</Text>
-      <Text>Student ID: {studentId}</Text>
-      <Text>Password: {password}</Text>
+      <Text style={{color: 'blue', fontSize: 30}}>Login</Text>
+      {/* <Text>Student ID: {studentId}</Text>
+      <Text>Password: {password}</Text> */}
 
       <CustomTextInput
         placeholder = {'Enter StudentID'}
@@ -38,7 +38,7 @@ const Login = () => {
       <TouchableOpacity      
         onPress={async () => {
           if (studentId === '' || password === '') {
-            Alert.alert('Invalid Credentials', 'Check studentId and password.');
+            Alert.alert('Please input Credentials.');
             return;
           }
 
