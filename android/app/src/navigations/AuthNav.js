@@ -1,23 +1,35 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ROUTES } from '../utils';
 
-//screens
-import Login from '../screens/auth/Login'
-import Register from '../screens/auth/Register'
+// screens
+import Login from '../screens/auth/Login';
+import Register from '../screens/auth/Register';
+import LoginErrorScreen from '../screens/LoginErrorScreen'; // import the error screen
 
-const Stack = createNativeStackNavigator ();
+const Stack = createNativeStackNavigator();
 
 const AuthNavigation = () => {
-    return (
-        <Stack.Navigator initialRouteName= {ROUTES.LOGIN}>
-            <Stack.Screen name={ROUTES.LOGIN} 
-                component ={Login} 
-                options={{headerShown: false,}}/>
-            <Stack.Screen name={ROUTES.REGISTER} 
-                component ={Register} 
-                options={{headerShown: false,}}/>
-        </Stack.Navigator>
-    );
+  return (
+    <Stack.Navigator initialRouteName={ROUTES.LOGIN}>
+      <Stack.Screen 
+        name={ROUTES.LOGIN} 
+        component={Login} 
+        options={{ headerShown: false }}
+      />
+      
+      <Stack.Screen 
+        name={ROUTES.REGISTER} 
+        component={Register} 
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name={ROUTES.LOGIN_ERROR}           // add this line
+        component={LoginErrorScreen}        // error screen component
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
 };
 
 export default AuthNavigation;

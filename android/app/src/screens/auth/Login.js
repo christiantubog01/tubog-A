@@ -1,78 +1,87 @@
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native'
+import { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+
 import { ROUTES } from '../../utils';
-// import { TextInput } from 'react-native-gesture-handler';             for some reason this doesnt work but its better to use this
 import CustomTextInput from '../../components/CustomTextInput';
-
 import { authLogin } from '../../app/reducers/auth';
-import { useDispatch } from 'react-redux';
-
+import { RESET_USER_LOGIN } from '../../app/actions';
 
 const Login = () => {
-    const [studentId, setstudentId] = useState('');
-    const [password, setpassword] = useState('');
+  const [studentId, setStudentId] = useState('');
+  const [password, setPassword] = useState('');
 
-    const navigation = useNavigation();
-    const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const { data, isError, isLoading } = useSelector(state => state.auth);
+
+  // handle login success or error
+  useEffect(() => {
+    if (isError) {
+      // show alert
+      Alert.alert('Login Error', 'Invalid student ID or password');
+
+      // navigate to error screen
+      navigation.navigate(ROUTES.LOGIN_ERROR); // make sure you have this screen in your navigator
+
+      // reset error flag
+      dispatch({ type: RESET_USER_LOGIN });
+    }
+
+    if (data) {
+      navigation.navigate(ROUTES.HOME);
+    }
+  }, [isError, data]);
 
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={{color: 'blue', fontSize: 30}}>Login</Text>
-      {/* <Text>Student ID: {studentId}</Text>
-      <Text>Password: {password}</Text> */}
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+      <Text style={{ color: 'blue', fontSize: 30, marginBottom: 20 }}>Login</Text>
 
       <CustomTextInput
-        placeholder = {'Enter StudentID'}
+        placeholder="Enter Student ID"
         value={studentId}
-        onChangeText={setstudentId}
+        onChangeText={setStudentId}
       />
+
       <CustomTextInput
-        placeholder = {'Enter Password'}
+        placeholder="Enter Password"
         value={password}
-        onChangeText={setpassword}
+        onChangeText={setPassword}
         secureTextEntry={true}
       />
 
-
-      <TouchableOpacity      
-        onPress={async () => {
-          if (studentId === '' || password === '') {
-            Alert.alert('Please input Credentials.');
+      <TouchableOpacity
+        style={{ marginTop: 15, width: '100%' }}
+        onPress={() => {
+          if (!studentId || !password) {
+            Alert.alert('Please input credentials');
             return;
           }
 
-          // await userLogin ({ studentId, password});
-          dispatch(
-            authLogin({
-              student_id: studentId,
-              password: password,
-            }), 
-          );         
+          dispatch(authLogin({ student_id: studentId, password }));
         }}
       >
         <View
           style={{
             backgroundColor: 'blue',
-            marginTop: 15,
-            padding: 10,
+            padding: 12,
             borderRadius: 10,
+            alignItems: 'center',
           }}
         >
-          <Text style={{ fontSize: 20, color: 'white' }}>Login</Text>
+          <Text style={{ color: 'white', fontSize: 20 }}>Login</Text>
         </View>
       </TouchableOpacity>
 
-      <Text>Create an Account?</Text>
+      <Text style={{ marginTop: 20 }}>Don't have an account?</Text>
 
-      <TouchableOpacity onPress={() =>{navigation.navigate(ROUTES.REGISTER)}}>
-        <Text style={{color: 'blue'}}>Register</Text>
+      <TouchableOpacity onPress={() => navigation.navigate(ROUTES.REGISTER)}>
+        <Text style={{ color: 'blue', marginTop: 5 }}>Register</Text>
       </TouchableOpacity>
-      
-
     </View>
-    
-  )
-}
+  );
+};
 
 export default Login;
