@@ -17,16 +17,10 @@ const Login = () => {
 
   const { data, isError, isLoading } = useSelector(state => state.auth);
 
-  // handle login success or error
   useEffect(() => {
     if (isError) {
-      // show alert
-      Alert.alert('Login Error', 'Invalid student ID or password');
 
-      // navigate to error screen
-      navigation.navigate(ROUTES.LOGIN_ERROR); // make sure you have this screen in your navigator
-
-      // reset error flag
+      navigation.navigate(ROUTES.LOGIN_ERROR); 
       dispatch({ type: RESET_USER_LOGIN });
     }
 

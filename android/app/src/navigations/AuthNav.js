@@ -24,8 +24,8 @@ const AuthNavigation = () => {
       />
 
       <Stack.Screen
-        name={ROUTES.LOGIN_ERROR}           // add this line
-        component={LoginErrorScreen}        // error screen component
+        name={ROUTES.LOGIN_ERROR}        
+        component={LoginErrorScreen}        
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
