@@ -1,33 +1,43 @@
-import { useNavigation } from '@react-navigation/native';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { ROUTES } from '../../utils';
+import { RootStackParamList } from '../../navigations/type';
+
 import CustomTextInput from '../../components/CustomTextInput';
 import { authLogin } from '../../app/reducers/auth';
 import { RESET_USER_LOGIN } from '../../app/actions';
 
-const Login = () => {
-  const [studentId, setStudentId] = useState('');
-  const [password, setPassword] = useState('');
+// 🔹 navigation type
+type NavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Login'
+>;
 
-  const navigation = useNavigation();
+const Login: React.FC = () => {
+  const [studentId, setStudentId] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+
+  const navigation = useNavigation<NavigationProp>();
   const dispatch = useDispatch();
 
-  const { data, isError, isLoading } = useSelector(state => state.auth);
+  const { data, isError, isLoading } = useSelector(
+    (state: any) => state.auth
+  );
 
   useEffect(() => {
     if (isError) {
-
-      navigation.navigate(ROUTES.LOGIN_ERROR); 
+      navigation.navigate(ROUTES.LOGIN_ERROR);
       dispatch({ type: RESET_USER_LOGIN });
     }
 
     if (data) {
       navigation.navigate(ROUTES.HOME);
     }
-  }, [isError, data]);
+  }, [isError, data, navigation, dispatch]);
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 20 }}>
@@ -47,7 +57,7 @@ const Login = () => {
       />
 
       <TouchableOpacity
-        style={{ marginTop: 15, width: '100%' }}
+        style={{ marginTop: 15, width: '25%' }}
         onPress={() => {
           if (!studentId || !password) {
             Alert.alert('Please input credentials');

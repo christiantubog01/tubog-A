@@ -1,9 +1,19 @@
+import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { ROUTES } from '../utils';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const LoginErrorScreen = () => {
-  const navigation = useNavigation();
+import { ROUTES } from '../utils';
+import { RootStackParamList } from '../navigations/type';
+
+// ✅ navigation type
+type NavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'LoginError'
+>;
+
+const LoginErrorScreen: React.FC = () => {
+  const navigation = useNavigation<NavigationProp>();
 
   return (
     <View
@@ -12,14 +22,14 @@ const LoginErrorScreen = () => {
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
-        backgroundColor: '#f8d7da', // light red background for error
+        backgroundColor: '#f8d7da',
       }}
     >
       <Text
         style={{
           fontSize: 28,
           fontWeight: 'bold',
-          color: '#721c24', // dark red text
+          color: '#721c24',
           marginBottom: 20,
         }}
       >
@@ -46,7 +56,9 @@ const LoginErrorScreen = () => {
           borderRadius: 10,
         }}
       >
-        <Text style={{ color: 'white', fontSize: 18 }}>Back to Login</Text>
+        <Text style={{ color: 'white', fontSize: 18 }}>
+          Back to Login
+        </Text>
       </TouchableOpacity>
     </View>
   );

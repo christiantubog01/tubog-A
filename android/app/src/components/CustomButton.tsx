@@ -1,6 +1,19 @@
-import { TouchableOpacity, Text, View } from 'react-native';
+import React from 'react';
+import { TouchableOpacity, Text, View, ViewStyle, TextStyle } from 'react-native';
 
-const CustomButton = ({ title, onPress, style, textStyle }) => {
+type Props = {
+  title: string;
+  onPress: () => void;
+  style?: ViewStyle;
+  textStyle?: TextStyle;
+};
+
+const CustomButton: React.FC<Props> = ({
+  title,
+  onPress,
+  style,
+  textStyle,
+}) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View
@@ -11,13 +24,13 @@ const CustomButton = ({ title, onPress, style, textStyle }) => {
             borderRadius: 10,
             alignItems: 'center',
           },
-          style, 
+          style,
         ]}
       >
         <Text
           style={[
             { color: 'white', fontSize: 18 },
-            textStyle, // 👈 custom text styles
+            textStyle,
           ]}
         >
           {title}

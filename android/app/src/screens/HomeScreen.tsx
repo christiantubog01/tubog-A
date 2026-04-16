@@ -1,9 +1,19 @@
+import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import { IMG, ROUTES } from '../utils';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const HomeScreen = () => {
-  const navigation = useNavigation();
+import { IMG, ROUTES } from '../utils';
+import { RootStackParamList } from '../navigations/type';
+
+// ✅ navigation type
+type NavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Home'
+>;
+
+const HomeScreen: React.FC = () => {
+  const navigation = useNavigation<NavigationProp>();
 
   return (
     <View
@@ -16,13 +26,11 @@ const HomeScreen = () => {
       }}
     >
       <Image
-        source={{
-          uri: IMG.LOGO3,
-        }}
+        source={{ uri: IMG.LOGO3 }}
         style={{ width: 200, height: 200 }}
       />
-      <Text style={{ fontSize: 20 }}>HomeScreen</Text>
 
+      <Text style={{ fontSize: 20 }}>HomeScreen</Text>
 
       <TouchableOpacity
         onPress={() => {
@@ -36,12 +44,12 @@ const HomeScreen = () => {
             borderRadius: 10,
           }}
         >
-          <Text style={{ fontSize: 40, color: 'white' }}>GO TO PROFILE</Text>
+          <Text style={{ fontSize: 40, color: 'white' }}>
+            GO TO PROFILE
+          </Text>
         </View>
       </TouchableOpacity>
     </View>
-
-    
   );
 };
 

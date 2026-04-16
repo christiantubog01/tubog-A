@@ -1,5 +1,5 @@
 // const BASE_URL = "http://192.168.1.28:8000/api";   
-const BASE_URL = "http://10.60.122.159:8000/api";   
+const BASE_URL = "http://192.168.137.1:8000/api";   
 
 //  [http://10.0.2.2:8000/api/login] still doesnt work
 
