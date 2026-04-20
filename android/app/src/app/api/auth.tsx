@@ -1,5 +1,5 @@
 // const BASE_URL = "http://192.168.1.28:8000/api";   
-const BASE_URL = "http://192.168.137.1:8000/api";   
+const BASE_URL = "http://10.245.93.159:8000/api";   
 
 //  [http://10.0.2.2:8000/api/login] still doesnt work
 
@@ -11,14 +11,22 @@ let options = {
   },
 };
 
-export async function authLogin({ student_id, password }) {
+export async function authLogin(
+  {
+    student_id,
+    password,
+  }: {
+    student_id: string;
+    password: string;
+  }
+) {
   console.log('API called with:', student_id);
   console.log('API called with:', password);
 
   const responseBody = await fetch(BASE_URL + '/login', {
     ...options,
     body: JSON.stringify({
-      username: student_id,
+      student_id: student_id,
       password: password,
     }),
   });
@@ -29,6 +37,6 @@ export async function authLogin({ student_id, password }) {
   if (responseBody.status === 200) {
     return data;
   } else {
-    throw new Error(data.errors.password || 'Login failed');
+    throw new Error(data?.errors?.password || 'Login failed');
   }
 }

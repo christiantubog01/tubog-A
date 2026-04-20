@@ -7,19 +7,45 @@ import {
   USER_LOGOUT,
 } from '../actions';
 
-const INITIALSTATE = {
+// =====================
+// State type
+// =====================
+type AuthState = {
+  data: any;
+  isLoading: boolean;
+  isError: boolean;
+};
+
+// =====================
+// Action type
+// =====================
+type AuthAction = {
+  type: string;
+  payload?: any;
+};
+
+// =====================
+// Initial state
+// =====================
+const INITIALSTATE: AuthState = {
   data: null,
   isLoading: false,
   isError: false,
 };
 
-export default function reducer(state = INITIALSTATE, action) {
+// =====================
+// Reducer
+// =====================
+export default function reducer(
+  state: AuthState = INITIALSTATE,
+  action: AuthAction
+): AuthState {
   console.log(action.type);
 
   switch (action.type) {
     case USER_LOGIN_REQUEST:
       return {
-        ...state, 
+        ...state,
         data: null,
         isLoading: true,
         isError: false,
@@ -44,7 +70,7 @@ export default function reducer(state = INITIALSTATE, action) {
     case RESET_USER_LOGIN:
       return INITIALSTATE;
 
-    case USER_LOGOUT: 
+    case USER_LOGOUT:
       return INITIALSTATE;
 
     default:
@@ -52,7 +78,10 @@ export default function reducer(state = INITIALSTATE, action) {
   }
 }
 
-export const authLogin = (payload) => ({
+// =====================
+// Action creator
+// =====================
+export const authLogin = (payload: any) => ({
   type: USER_LOGIN,
   payload,
 });
