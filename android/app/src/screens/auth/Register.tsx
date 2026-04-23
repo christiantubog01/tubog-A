@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { ROUTES } from '../../utils';
-import { RootStackParamList } from '../../navigations/type';
+import { RootStackParamList } from '../../types/type';
 
 import CustomTextInput from '../../components/CustomTextInput';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { ROUTES } from '../utils';
-import { RootStackParamList } from './type';
+import { RootStackParamList } from '../types/type';
 
 // screens
 import Login from '../screens/auth/Login';

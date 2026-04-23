@@ -4,7 +4,7 @@ import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { IMG, ROUTES } from '../utils';
-import { RootStackParamList } from '../navigations/type';
+import { RootStackParamList } from '../types/type';
 
 // ✅ navigation type
 type NavigationProp = NativeStackNavigationProp<

@@ -1,7 +1,17 @@
-// const BASE_URL = "http://192.168.1.28:8000/api";   
-const BASE_URL = "http://10.54.134.159:8000/api";   
+interface LoginCredentials {
+  student_id: string;
+  password: string;
+}
 
-//  [http://10.0.2.2:8000/api/login] still doesnt work
+interface LoginResponse {
+    "user": string,
+    "email": string,
+    "roles": [],
+    "token": string;
+    "error"?: "Error message if login fails";
+}
+
+const BASE_URL = "http://192.168.1.2:8000/api";   
 
 let options = {
   method: 'POST',
@@ -31,12 +41,12 @@ export async function authLogin(
     }),
   });
 
-  const data = await responseBody.json();
-  console.log(data);
+  const data: LoginResponse = await responseBody.json();
+  console.log(data + "<-- API response");
 
   if (responseBody.status === 200) {
     return data;
   } else {
-    throw new Error(data?.errors?.password || 'Login failed');
+    throw new Error(data?.error || 'Login failed');
   }
 }

@@ -4,7 +4,7 @@ import { ROUTES } from '../utils';
 // screens
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import { RootStackParamList } from './type';
+import { RootStackParamList } from '../types/type';
 
 const Stack = createStackNavigator<RootStackParamList>();
 

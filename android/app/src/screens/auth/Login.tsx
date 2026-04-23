@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { ROUTES } from '../../utils';
-import { RootStackParamList } from '../../navigations/type';
+import { RootStackParamList } from '../../types/type';
 
 import CustomTextInput from '../../components/CustomTextInput';
 import { authLogin } from '../../app/reducers/auth';
