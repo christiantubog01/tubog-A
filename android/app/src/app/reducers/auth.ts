@@ -5,6 +5,7 @@ import {
   USER_LOGIN_ERROR,
   USER_LOGIN_REQUEST,
   USER_LOGOUT,
+  AUTH_SUCCESS,
 } from '../actions';
 
 // =====================
@@ -65,6 +66,13 @@ export default function reducer(
         data: null,
         isLoading: false,
         isError: true,
+      };
+      case AUTH_SUCCESS:
+      return {
+      ...state,
+      data: action.payload, 
+      isLoading: false,
+      isError: false,
       };
 
     case RESET_USER_LOGIN:

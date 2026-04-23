@@ -5,3 +5,5 @@ export const USER_LOGIN_ERROR = 'USER_LOGIN_ERROR';
 export const RESET_USER_LOGIN = 'RESET_USER_LOGIN';
 
 export const USER_LOGOUT = 'USER_LOGOUT';
+
+export const AUTH_SUCCESS = 'AUTH_SUCCESS';
