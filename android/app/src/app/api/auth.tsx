@@ -11,7 +11,7 @@ interface LoginResponse {
     "error"?: "Error message if login fails";
 }
 
-const BASE_URL = "http://192.168.1.2:8000/api";   
+const BASE_URL = "http://10.202.177.159:8000/api";   
 
 let options = {
   method: 'POST',

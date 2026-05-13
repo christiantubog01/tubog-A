@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
+  GoogleSignin,
   GoogleSigninButton,
   isSuccessResponse,
 } from '@react-native-google-signin/google-signin';
@@ -38,7 +39,11 @@ const Login: React.FC = () => {
   }, []);
 
   // 🔥 GOOGLE LOGIN
-  const handleGoogleLogin = async () => {
+const handleGoogleLogin = async () => {
+  try {
+    // 👇 FORCE account selection (add this)
+    await GoogleSignin.signOut();
+
     const response = await signInWithGoogle();
 
     if (!response) {
@@ -60,28 +65,26 @@ const Login: React.FC = () => {
 
     console.log('GOOGLE ID TOKEN:', idToken);
 
-    try {
-      const res = await fetch('http://192.168.1.2:8000/api/google-login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ idToken }),
-      });
+    const res = await fetch('http://10.202.177.159:8000/api/google-login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ idToken }),
+    });
 
-      const result = await res.json();
-      console.log('JWT RESPONSE:', result);
+    const result = await res.json();
+    console.log('JWT RESPONSE:', result);
 
-      // 🔥 IMPORTANT: STORE IN REDUX (THIS FIXES NAVIGATION)
-      dispatch({
-        type: AUTH_SUCCESS,
-        payload: result, // must include token
-      });
+    dispatch({
+      type: AUTH_SUCCESS,
+      payload: result,
+    });
 
-    } catch (err) {
-      console.log('Google login error:', err);
-    }
-  };
+  } catch (err) {
+    console.log('Google login error:', err);
+  }
+};
 
   useEffect(() => {
     if (isError) {
