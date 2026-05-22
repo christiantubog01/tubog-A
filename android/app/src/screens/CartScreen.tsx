@@ -16,56 +16,42 @@ import {
   CLEAR_CART,
 } from '../app/actions/cart';
 
+type CartItem = {
+  id: number;
+  product_name: string;
+  price: number;
+  quantity: number;
+};
+
 const CartScreen: React.FC = () => {
 
   const dispatch = useDispatch();
-  const items = useSelector((state: any) => state.cart.items);
-  const token = useSelector((state: any) => state.auth.data?.token);
 
+  const items = useSelector(
+    (state: any) => state.cart.items,
+  );
+
+  const token = useSelector(
+    (state: any) => state.auth.data?.token,
+  );
+
+  // TOTAL
   const total = items.reduce(
-    (sum: number, item: any) =>
-      sum + item.price,
+    (sum: number, item: CartItem) =>
+      sum + item.price * item.quantity,
     0,
   );
 
-const handleCheckout = async () => {
-  try {
-    
+  // CHECKOUT
+  const handleCheckout = async () => {
 
-    // 1. calculate total
-const total = items.reduce(
-  (sum: number, item: any) =>
-    sum + item.price * item.quantity,
-  0
-);
+    try {
 
-    // 2. CREATE ORDER
-const orderRes = await fetch(
-  'https://anita-fresh-delights-web-dev-1-production.up.railway.app/api/orders',
-  {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/ld+json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      total,
-      status: 'Pending',
-    }),
-  }
-);
-
-console.log('ORDER STATUS:', orderRes.status);
-
-const orderText = await orderRes.text();
-console.log('ORDER RAW RESPONSE:', orderText);
-
-    const order = await orderRes.json();
-
-    // 3. CREATE ORDER ITEMS
-    for (const item of items) {
-      await fetch(
-        'https://anita-fresh-delights-web-dev-1-production.up.railway.app/api/order_items',
+      // =========================
+      // CREATE ORDER
+      // =========================
+      const orderRes = await fetch(
+        'https://anita-fresh-delights-web-dev-1-production.up.railway.app/api/orders',
         {
           method: 'POST',
           headers: {
@@ -73,25 +59,80 @@ console.log('ORDER RAW RESPONSE:', orderText);
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            order_ref: order['@id'], // IMPORTANT
-            product: `/api/products/${item.id}`,
-            quantity: item.quantity,
-            price: item.price,
-            subtotal: item.price * item.quantity,
+            total,
+            status: 'Pending',
           }),
         }
       );
+
+      console.log(
+        'ORDER STATUS:',
+        orderRes.status
+      );
+
+      // READ RESPONSE ONLY ONCE
+      const order = await orderRes.json();
+
+      console.log(
+        'ORDER RAW RESPONSE:',
+        order
+      );
+
+      // =========================
+      // CREATE ORDER ITEMS
+      // =========================
+      for (const item of items) {
+
+        const itemRes = await fetch(
+          'https://anita-fresh-delights-web-dev-1-production.up.railway.app/api/order_items',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/ld+json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              order_ref: order['@id'],
+              product: `/api/products/${item.id}`,
+              quantity: item.quantity,
+              price: item.price,
+              subtotal:
+                item.price * item.quantity,
+            }),
+          }
+        );
+
+        console.log(
+          'ORDER ITEM STATUS:',
+          itemRes.status
+        );
+      }
+
+      // =========================
+      // CLEAR CART
+      // =========================
+      dispatch({
+        type: CLEAR_CART,
+      });
+
+      // =========================
+      // SUCCESS ALERT
+      // =========================
+      Alert.alert(
+        'Success',
+        'Order placed successfully!'
+      );
+
+    } catch (error) {
+
+      console.log(error);
+
+      Alert.alert(
+        'Error',
+        'Checkout failed'
+      );
     }
-
-    // 4. CLEAR CART
-    dispatch({ type: CLEAR_CART });
-
-    Alert.alert('Success', 'Order placed successfully!');
-  } catch (error) {
-    console.log(error);
-    Alert.alert('Error', 'Checkout failed');
-  }
-};
+  };
 
   return (
     <View style={styles.container}>
@@ -105,6 +146,7 @@ console.log('ORDER RAW RESPONSE:', orderText);
         keyExtractor={(_, index) =>
           index.toString()
         }
+
         renderItem={({ item, index }) => (
 
           <View style={styles.card}>
@@ -117,11 +159,15 @@ console.log('ORDER RAW RESPONSE:', orderText);
               ₱{item.price}
             </Text>
 
+            <Text>
+              Quantity: {item.quantity}
+            </Text>
+
             <TouchableOpacity
               onPress={() =>
                 dispatch({
                   type: REMOVE_FROM_CART,
-                  payload: index,
+                  payload: item.id,
                 })
               }
             >
@@ -155,6 +201,7 @@ console.log('ORDER RAW RESPONSE:', orderText);
 export default CartScreen;
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     padding: 20,
@@ -207,4 +254,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+
 });

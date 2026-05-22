@@ -68,7 +68,10 @@ const HomeScreen: React.FC = () => {
           </Text>
         </TouchableOpacity>
 <TouchableOpacity
-  style={styles.button}
+  style={[
+    styles.button,
+    { backgroundColor: 'green', marginTop: 15 }
+  ]}
   onPress={() => navigation.navigate(ROUTES.PRODUCTS)}
 >
   <Text style={styles.buttonText}>
@@ -79,7 +82,7 @@ const HomeScreen: React.FC = () => {
 <TouchableOpacity
   style={[
     styles.button,
-    { backgroundColor: '#ea580c', marginTop: 15 }
+    { backgroundColor: 'green', marginTop: 15 }
   ]}
   onPress={() => navigation.navigate(ROUTES.CART)}
 >
@@ -91,7 +94,7 @@ const HomeScreen: React.FC = () => {
 <TouchableOpacity
   style={[
     styles.button,
-    { backgroundColor: '#7c3aed', marginTop: 15 }
+    { backgroundColor: 'green', marginTop: 15 }
   ]}
   onPress={() => navigation.navigate(ROUTES.ORDERS)}
 >
