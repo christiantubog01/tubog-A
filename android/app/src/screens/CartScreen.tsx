@@ -20,11 +20,11 @@ const CartScreen: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const cartItems = useSelector(
-    (state: any) => state.cart.cartItems,
+  const items = useSelector(
+    (state: any) => state.cart.items,
   );
 
-  const total = cartItems.reduce(
+  const total = items.reduce(
     (sum: number, item: any) =>
       sum + item.price,
     0,
@@ -55,7 +55,7 @@ const CartScreen: React.FC = () => {
       </Text>
 
       <FlatList
-        data={cartItems}
+        data={items}
         keyExtractor={(_, index) =>
           index.toString()
         }
