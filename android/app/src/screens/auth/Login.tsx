@@ -106,7 +106,7 @@ const handleGoogleLogin = async () => {
       padding: 20
     }}>
 
-      <Text style={{ color: 'blue', fontSize: 30, marginBottom: 20 }}>
+      <Text style={{ color: 'green', fontSize: 30, marginBottom: 20 }}>
         Login
       </Text>
 
@@ -136,7 +136,7 @@ const handleGoogleLogin = async () => {
         }}
       >
         <View style={{
-          backgroundColor: 'blue',
+          backgroundColor: 'green',
           padding: 12,
           borderRadius: 10,
           alignItems: 'center',
@@ -146,11 +146,11 @@ const handleGoogleLogin = async () => {
       </TouchableOpacity>
 
       {/* 🔥 GOOGLE LOGIN */}
-      <GoogleSigninButton
+      {/* <GoogleSigninButton
         size={GoogleSigninButton.Size.Wide}
         color={GoogleSigninButton.Color.Dark}
         onPress={handleGoogleLogin}
-      />
+      /> */}
 
       <Text style={{ marginTop: 20 }}>
         Don't have an account?

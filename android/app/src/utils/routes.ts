@@ -6,4 +6,6 @@ export const ROUTES = {
 	//main
 	HOME: 'Home',
 	PROFILE: 'Profile',
+	
+	ORDERS: 'Orders',
 } as const;
