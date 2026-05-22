@@ -67,14 +67,38 @@ const HomeScreen: React.FC = () => {
             Go To Profile
           </Text>
         </TouchableOpacity>
-        {/* ORDERS BUTTON */}
 <TouchableOpacity
-  activeOpacity={0.8}
-  style={[styles.button, styles.ordersButton]}
-  onPress={() => {
-    navigation.navigate(ROUTES.ORDERS);
-  }}
-></TouchableOpacity>
+  style={styles.button}
+  onPress={() => navigation.navigate(ROUTES.PRODUCTS)}
+>
+  <Text style={styles.buttonText}>
+    View Products
+  </Text>
+</TouchableOpacity>
+
+<TouchableOpacity
+  style={[
+    styles.button,
+    { backgroundColor: '#ea580c', marginTop: 15 }
+  ]}
+  onPress={() => navigation.navigate(ROUTES.CART)}
+>
+  <Text style={styles.buttonText}>
+    My Cart
+  </Text>
+</TouchableOpacity>
+
+<TouchableOpacity
+  style={[
+    styles.button,
+    { backgroundColor: '#7c3aed', marginTop: 15 }
+  ]}
+  onPress={() => navigation.navigate(ROUTES.ORDERS)}
+>
+  <Text style={styles.buttonText}>
+    My Orders
+  </Text>
+</TouchableOpacity>
       </View>
     </View>
   );

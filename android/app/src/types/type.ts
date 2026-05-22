@@ -4,5 +4,7 @@ export type RootStackParamList = {
   LoginError: undefined;
   Home: undefined;
   Profile: undefined;
+  Products: undefined;
+  Cart: undefined;
   Orders: undefined;
 };

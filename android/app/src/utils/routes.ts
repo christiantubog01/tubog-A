@@ -7,5 +7,7 @@ export const ROUTES = {
 	HOME: 'Home',
 	PROFILE: 'Profile',
 	
-	ORDERS: 'Orders',
+  	ORDERS: 'Orders',
+  	PRODUCTS: 'Products',
+  	CART: 'Cart',
 } as const;

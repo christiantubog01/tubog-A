@@ -5,6 +5,7 @@ import createSagaMiddleware from 'redux-saga';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import auth from './auth';
+import cart from './cart';
 
 // Config
 const sagaMiddleware = createSagaMiddleware();
