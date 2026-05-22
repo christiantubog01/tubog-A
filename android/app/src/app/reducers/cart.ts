@@ -26,32 +26,46 @@ export default function cartReducer(
 ): CartState {
   switch (action.type) {
 
-    case ADD_TO_CART: {
-      const product = action.payload;
+case ADD_TO_CART: {
 
-      const existing = state.items.find(
-        (item) => item.id === product.id
-      );
+  const product = action.payload;
 
-      if (existing) {
-        return {
-          ...state,
-          items: state.items.map((item) =>
-            item.id === product.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
-          ),
-        };
-      }
+  const existing = state.items.find(
+    (item) => item.id === product.id
+  );
 
-      return {
-        ...state,
-        items: [
-          ...state.items,
-          { ...product, quantity: 1 },
-        ],
-      };
-    }
+  // IF PRODUCT ALREADY EXISTS
+  if (existing) {
+
+    return {
+      ...state,
+      items: state.items.map((item) =>
+
+        item.id === product.id
+
+          ? {
+              ...item,
+              quantity:
+                item.quantity + product.quantity,
+            }
+
+          : item
+      ),
+    };
+  }
+
+  // NEW PRODUCT
+  return {
+    ...state,
+    items: [
+      ...state.items,
+      {
+        ...product,
+        quantity: product.quantity,
+      },
+    ],
+  };
+}
 
     case REMOVE_FROM_CART:
       return {

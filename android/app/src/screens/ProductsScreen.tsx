@@ -20,10 +20,16 @@ interface Product {
 }
 
 const ProductsScreen: React.FC = () => {
+
   const [products, setProducts] = useState<Product[]>([]);
+
+  // ✅ QUANTITY STATE
+  const [quantities, setQuantities] = useState<{
+    [key: number]: number;
+  }>({});
+
   const dispatch = useDispatch();
 
-  // ✅ GET TOKEN FROM REDUX
   const token = useSelector(
     (state: any) => state.auth.data?.token
   );
@@ -34,6 +40,7 @@ const ProductsScreen: React.FC = () => {
 
   const fetchProducts = async () => {
     try {
+
       const response = await fetch(
         'https://anita-fresh-delights-web-dev-1-production.up.railway.app/api/products',
         {
@@ -41,8 +48,6 @@ const ProductsScreen: React.FC = () => {
           headers: {
             Accept: 'application/ld+json',
             'Content-Type': 'application/json',
-
-            // 🔥 IMPORTANT FIX
             Authorization: `Bearer ${token}`,
           },
         }
@@ -51,30 +56,47 @@ const ProductsScreen: React.FC = () => {
       console.log('STATUS:', response.status);
 
       const data = await response.json();
+
       console.log('FULL DATA:', data);
 
       setProducts(data?.member ?? []);
+
     } catch (error) {
       console.log('FETCH ERROR:', error);
     }
   };
 
+  // ✅ ADD TO CART WITH QUANTITY
   const addToCart = (product: Product) => {
+
+    const quantity = quantities[product.id] || 1;
+
     dispatch({
       type: ADD_TO_CART,
-      payload: product,
+      payload: {
+        ...product,
+        quantity,
+      },
     });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Products</Text>
+
+      <Text style={styles.title}>
+        Products
+      </Text>
 
       <FlatList
         data={products}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) =>
+          item.id.toString()
+        }
+
         renderItem={({ item }) => (
+
           <View style={styles.card}>
+
             <Image
               source={{
                 uri:
@@ -84,21 +106,76 @@ const ProductsScreen: React.FC = () => {
               style={styles.image}
             />
 
-            <Text style={styles.name}>{item.product_name}</Text>
+            <Text style={styles.name}>
+              {item.product_name}
+            </Text>
+
             <Text style={styles.description}>
               {item.product_description}
             </Text>
-            <Text style={styles.price}>₱{item.price}</Text>
+
+            <Text style={styles.price}>
+              ₱{item.price}
+            </Text>
+
+            {/* ✅ QUANTITY BUTTONS */}
+
+            <View style={styles.quantityContainer}>
+
+              <TouchableOpacity
+                style={styles.qtyButton}
+                onPress={() =>
+                  setQuantities((prev) => ({
+                    ...prev,
+                    [item.id]: Math.max(
+                      1,
+                      (prev[item.id] || 1) - 1
+                    ),
+                  }))
+                }
+              >
+                <Text style={styles.qtyButtonText}>
+                  -
+                </Text>
+              </TouchableOpacity>
+
+              <Text style={styles.qtyText}>
+                {quantities[item.id] || 1}
+              </Text>
+
+              <TouchableOpacity
+                style={styles.qtyButton}
+                onPress={() =>
+                  setQuantities((prev) => ({
+                    ...prev,
+                    [item.id]:
+                      (prev[item.id] || 1) + 1,
+                  }))
+                }
+              >
+                <Text style={styles.qtyButtonText}>
+                  +
+                </Text>
+              </TouchableOpacity>
+
+            </View>
+
+            {/* ✅ ADD TO CART BUTTON */}
 
             <TouchableOpacity
               style={styles.button}
               onPress={() => addToCart(item)}
             >
-              <Text style={styles.buttonText}>Add To Cart</Text>
+              <Text style={styles.buttonText}>
+                Add To Cart
+              </Text>
             </TouchableOpacity>
+
           </View>
+
         )}
       />
+
     </View>
   );
 };
@@ -127,9 +204,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
 
     elevation: 4,
+
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 5,
+
     shadowOffset: {
       width: 0,
       height: 3,
@@ -160,6 +239,38 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: '#16a34a',
   },
+
+  // ✅ QUANTITY STYLES
+
+  quantityContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 15,
+  },
+
+  qtyButton: {
+    backgroundColor: '#2563eb',
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  qtyButtonText: {
+    color: 'white',
+    fontSize: 22,
+    fontWeight: 'bold',
+  },
+
+  qtyText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginHorizontal: 20,
+  },
+
+  // ✅ ADD TO CART BUTTON
 
   button: {
     backgroundColor: '#2563eb',

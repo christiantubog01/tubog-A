@@ -1,4 +1,8 @@
-import React from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
 import {
   View,
   Text,
@@ -6,7 +10,10 @@ import {
   FlatList,
   SafeAreaView,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
+
+import { useSelector } from 'react-redux';
 
 // ✅ ORDER TYPE
 interface Order {
@@ -16,51 +23,70 @@ interface Order {
   created_at: string;
 }
 
-// ✅ SAMPLE DATA
-const orders: Order[] = [
-  {
-    id: 1,
-    total: 1110,
-    status: 'Completed',
-    created_at: '2026-05-21T06:11:42+00:00',
-  },
-  {
-    id: 2,
-    total: 970,
-    status: 'Pending',
-    created_at: '2026-05-22T01:06:15+00:00',
-  },
-  {
-    id: 3,
-    total: 1350,
-    status: 'Pending',
-    created_at: '2026-05-22T01:08:37+00:00',
-  },
-  {
-    id: 4,
-    total: 525,
-    status: 'Processing',
-    created_at: '2026-05-22T01:10:14+00:00',
-  },
-  {
-    id: 5,
-    total: 190,
-    status: 'Pending',
-    created_at: '2026-05-22T01:11:21+00:00',
-  },
-  {
-    id: 6,
-    total: 80,
-    status: 'Cancelled',
-    created_at: '2026-05-22T01:12:41+00:00',
-  },
-];
-
 const OrdersScreen: React.FC = () => {
+
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // ✅ TOKEN
+  const token = useSelector(
+    (state: any) => state.auth.data?.token
+  );
+
+  // ✅ FETCH ORDERS
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const fetchOrders = async () => {
+
+    try {
+
+      const response = await fetch(
+        'https://anita-fresh-delights-web-dev-1-production.up.railway.app/api/orders',
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/ld+json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log(
+        'ORDERS STATUS:',
+        response.status
+      );
+
+      const data = await response.json();
+
+      console.log(
+        'ORDERS DATA:',
+        data
+      );
+
+      // ✅ API PLATFORM COLLECTION
+      setOrders(data.member ?? []);
+
+    } catch (error) {
+
+      console.log(
+        'FETCH ORDERS ERROR:',
+        error
+      );
+
+    } finally {
+
+      setLoading(false);
+
+    }
+  };
 
   // ✅ STATUS COLORS
   const getStatusColor = (status: string) => {
+
     switch (status) {
+
       case 'Completed':
         return '#16a34a';
 
@@ -80,15 +106,21 @@ const OrdersScreen: React.FC = () => {
 
   // ✅ FORMAT DATE
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString();
+    return new Date(date)
+      .toLocaleDateString();
   };
 
-  // ✅ RENDER ORDER CARD
-  const renderItem = ({ item }: { item: Order }) => (
+  // ✅ RENDER CARD
+  const renderItem = ({
+    item,
+  }: {
+    item: Order;
+  }) => (
+
     <View style={styles.card}>
 
-      {/* TOP */}
       <View style={styles.rowBetween}>
+
         <Text style={styles.orderId}>
           Order #{item.id}
         </Text>
@@ -97,30 +129,45 @@ const OrdersScreen: React.FC = () => {
           style={[
             styles.statusBadge,
             {
-              backgroundColor: getStatusColor(item.status),
+              backgroundColor:
+                getStatusColor(
+                  item.status
+                ),
             },
           ]}
         >
           <Text style={styles.statusText}>
             {item.status}
           </Text>
+
         </View>
+
       </View>
 
-      {/* TOTAL */}
       <Text style={styles.total}>
         ₱ {item.total.toFixed(2)}
       </Text>
 
-      {/* DATE */}
       <Text style={styles.date}>
-        Ordered on {formatDate(item.created_at)}
+        Ordered on{' '}
+        {formatDate(item.created_at)}
       </Text>
+
     </View>
   );
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   return (
+
     <SafeAreaView style={styles.container}>
+
       <StatusBar
         barStyle="dark-content"
         backgroundColor="#f1f5f9"
@@ -128,6 +175,7 @@ const OrdersScreen: React.FC = () => {
 
       {/* HEADER */}
       <View style={styles.header}>
+
         <Text style={styles.headerTitle}>
           My Orders
         </Text>
@@ -135,12 +183,15 @@ const OrdersScreen: React.FC = () => {
         <Text style={styles.headerSubtitle}>
           View your recent purchases
         </Text>
+
       </View>
 
-      {/* LIST */}
+      {/* ORDERS */}
       <FlatList
         data={orders}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) =>
+          item.id.toString()
+        }
         renderItem={renderItem}
         contentContainerStyle={{
           paddingHorizontal: 20,
@@ -148,6 +199,7 @@ const OrdersScreen: React.FC = () => {
         }}
         showsVerticalScrollIndicator={false}
       />
+
     </SafeAreaView>
   );
 };
@@ -155,9 +207,16 @@ const OrdersScreen: React.FC = () => {
 export default OrdersScreen;
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     backgroundColor: '#f1f5f9',
+  },
+
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   header: {
@@ -231,4 +290,5 @@ const styles = StyleSheet.create({
     color: '#64748b',
     marginTop: 8,
   },
+
 });
