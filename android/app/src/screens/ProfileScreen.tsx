@@ -6,11 +6,20 @@ import { IMG } from '../utils';
 import CustomButton from '../components/CustomButton';
 import { RESET_USER_LOGIN } from '../app/actions';
 
-// 🔹 Proper state type
+interface User {
+  username: string;
+  email: string;
+  roles: string[];
+  verified: boolean;
+}
+
+interface AuthData {
+  token: string;
+  user: User;
+}
+
 interface AuthState {
-  data: {
-    user?: string;
-  } | null;
+  data: AuthData | null;
   isLoading: boolean;
   isError: boolean;
 }
@@ -22,7 +31,9 @@ interface RootState {
 const ProfileScreen: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { data } = useSelector((state: RootState) => state.auth);
+  const { data } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   return (
     <View
@@ -35,22 +46,42 @@ const ProfileScreen: React.FC = () => {
       }}
     >
       <Image
-        source={{ uri: IMG.LOGO }}
+        source={{ uri: IMG.LOGO1 }}
         style={{ width: 200, height: 200 }}
       />
 
-      <Text style={{ fontSize: 40 }}>ProfileScreen</Text>
+      <Text style={{ fontSize: 40 }}>
+        ProfileScreen
+      </Text>
 
-      {/* ✅ USER INFO */}
+      {/* ✅ USERNAME */}
       <Text style={{ fontSize: 20, marginTop: 10 }}>
-        Username: {data?.user ?? 'No user logged in'}
+        Username:{' '}
+        {data?.user.username ?? 'No user logged in'}
+      </Text>
+
+      {/* ✅ EMAIL */}
+      <Text style={{ fontSize: 18, marginTop: 5 }}>
+        Email:{' '}
+        {data?.user.email ?? 'No email'}
+      </Text>
+
+      {/* ✅ VERIFIED */}
+      <Text style={{ fontSize: 18, marginTop: 5 }}>
+        Verified:{' '}
+        {data?.user.verified ? 'Yes' : 'No'}
       </Text>
 
       {/* LOGOUT */}
       <CustomButton
         title="LOGOUT"
-        onPress={() => dispatch({ type: RESET_USER_LOGIN })}
-        style={{ backgroundColor: 'red', marginTop: 20 }}
+        onPress={() =>
+          dispatch({ type: RESET_USER_LOGIN })
+        }
+        style={{
+          backgroundColor: 'red',
+          marginTop: 20,
+        }}
       />
     </View>
   );

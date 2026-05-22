@@ -5,12 +5,14 @@ import {
   USER_LOGIN_ERROR,
   USER_LOGIN_REQUEST,
 } from '../actions';
-import { authLogin } from '../api/auth';
+
+import { loginApi } from '../api/auth';
+
 import { SagaIterator } from 'redux-saga';
 
 // ✅ types
 type LoginPayload = {
-  student_id: string;
+  username: string;
   password: string;
 };
 
@@ -21,13 +23,20 @@ type LoginAction = {
 
 type LoginResponse = any;
 
-export function* userLoginAsync(action: LoginAction): SagaIterator {
+export function* userLoginAsync(
+  action: LoginAction,
+): SagaIterator {
   console.log('Login request:', action.payload);
 
-  yield put({ type: USER_LOGIN_REQUEST });
+  yield put({
+    type: USER_LOGIN_REQUEST,
+  });
 
   try {
-    const response: LoginResponse = yield call(authLogin, action.payload);
+    const response: LoginResponse = yield call(
+      loginApi,
+      action.payload,
+    );
 
     console.log('Login response:', response);
 
@@ -35,10 +44,13 @@ export function* userLoginAsync(action: LoginAction): SagaIterator {
       type: USER_LOGIN_COMPLETE,
       payload: response,
     });
+
   } catch (error) {
     console.error('Login error:', error);
 
-    yield put({ type: USER_LOGIN_ERROR });
+    yield put({
+      type: USER_LOGIN_ERROR,
+    });
   }
 }
 

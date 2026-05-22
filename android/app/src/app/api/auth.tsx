@@ -1,52 +1,49 @@
 interface LoginCredentials {
-  student_id: string;
+  username: string;
   password: string;
 }
 
-interface LoginResponse {
-    "user": string,
-    "email": string,
-    "roles": [],
-    "token": string;
-    "error"?: "Error message if login fails";
+interface User {
+  username: string;
+  email: string;
+  roles: string[];
+  verified: boolean;
 }
 
-const BASE_URL = "http://10.202.177.159:8000/api";   
+export interface LoginResponse {
+  token: string;
+  user: User;
+  error?: string;
+}
 
-let options = {
-  method: 'POST',
-  headers: {
-    Accept: 'application/json',       
-    'Content-Type': 'application/json',
-  },
-};
+const BASE_URL =
+  'https://anita-fresh-delights-web-dev-1-production.up.railway.app/api';
 
-export async function authLogin(
-  {
-    student_id,
-    password,
-  }: {
-    student_id: string;
-    password: string;
-  }
-) {
-  console.log('API called with:', student_id);
-  console.log('API called with:', password);
+export async function loginApi({
+  username,
+  password,
+}: LoginCredentials): Promise<LoginResponse> {
+  console.log('API called with:', username);
 
-  const responseBody = await fetch(BASE_URL + '/login', {
-    ...options,
+  const response = await fetch(BASE_URL + '/login', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({
-      student_id: student_id,
-      password: password,
+      username,
+      password,
     }),
   });
 
-  const data: LoginResponse = await responseBody.json();
-  console.log(data + "<-- API response");
+  const data: LoginResponse = await response.json();
 
-  if (responseBody.status === 200) {
-    return data;
-  } else {
-    throw new Error(data?.error || 'Login failed');
+  console.log('API RESPONSE:', data);
+
+  if (!response.ok) {
+    throw new Error(data.error || 'Login failed');
   }
+
+  return data;
 }

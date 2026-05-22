@@ -132,7 +132,7 @@ const handleGoogleLogin = async () => {
             return;
           }
 
-          dispatch(authLogin({ student_id: studentId, password }));
+          dispatch(authLogin({ username: studentId, password }));
         }}
       >
         <View style={{

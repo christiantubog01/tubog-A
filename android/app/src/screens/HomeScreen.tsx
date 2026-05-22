@@ -21,12 +21,10 @@ const HomeScreen: React.FC = () => {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        borderWidth: 3,
-        borderColor: 'blue',
       }}
     >
       <Image
-        source={{ uri: IMG.LOGO3 }}
+        source={{ uri: IMG.LOGO1 }}
         style={{ width: 200, height: 200 }}
       />
 
@@ -39,7 +37,7 @@ const HomeScreen: React.FC = () => {
       >
         <View
           style={{
-            backgroundColor: 'blue',
+            backgroundColor: 'green',
             padding: 10,
             borderRadius: 10,
           }}
@@ -49,6 +47,7 @@ const HomeScreen: React.FC = () => {
           </Text>
         </View>
       </TouchableOpacity>
+      
     </View>
   );
 };
