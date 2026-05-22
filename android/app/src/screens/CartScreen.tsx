@@ -19,10 +19,8 @@ import {
 const CartScreen: React.FC = () => {
 
   const dispatch = useDispatch();
-
-  const items = useSelector(
-    (state: any) => state.cart.items,
-  );
+  const items = useSelector((state: any) => state.cart.items);
+  const token = useSelector((state: any) => state.auth.data?.token);
 
   const total = items.reduce(
     (sum: number, item: any) =>
@@ -30,22 +28,70 @@ const CartScreen: React.FC = () => {
     0,
   );
 
-  const handleCheckout = async () => {
+const handleCheckout = async () => {
+  try {
+    
 
-    try {
+    // 1. calculate total
+const total = items.reduce(
+  (sum: number, item: any) =>
+    sum + item.price * item.quantity,
+  0
+);
 
-      Alert.alert(
-        'Checkout Successful'
+    // 2. CREATE ORDER
+const orderRes = await fetch(
+  'https://anita-fresh-delights-web-dev-1-production.up.railway.app/api/orders',
+  {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/ld+json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      total,
+      status: 'Pending',
+    }),
+  }
+);
+
+console.log('ORDER STATUS:', orderRes.status);
+
+const orderText = await orderRes.text();
+console.log('ORDER RAW RESPONSE:', orderText);
+
+    const order = await orderRes.json();
+
+    // 3. CREATE ORDER ITEMS
+    for (const item of items) {
+      await fetch(
+        'https://anita-fresh-delights-web-dev-1-production.up.railway.app/api/order_items',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/ld+json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            order_ref: order['@id'], // IMPORTANT
+            product: `/api/products/${item.id}`,
+            quantity: item.quantity,
+            price: item.price,
+            subtotal: item.price * item.quantity,
+          }),
+        }
       );
-
-      dispatch({
-        type: CLEAR_CART,
-      });
-
-    } catch (error) {
-      console.log(error);
     }
-  };
+
+    // 4. CLEAR CART
+    dispatch({ type: CLEAR_CART });
+
+    Alert.alert('Success', 'Order placed successfully!');
+  } catch (error) {
+    console.log(error);
+    Alert.alert('Error', 'Checkout failed');
+  }
+};
 
   return (
     <View style={styles.container}>
